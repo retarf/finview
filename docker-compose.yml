@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    db:
+      image: postgres:14.2
+      environment:
+        POSTGRES_USER: $BD_USER
+        POSTGRES_PASSWORD: $BD_PASS
+        POSTGRES_DB: $BD_NAME
+      restart: always
+
+    backend:
+      build:
+        context: .
+        dockerfile: config/backend.Dockerfile
+      ports:
+       - "8000:8000"
+      depends_on:
+        - db
+      volumes:
+        - ./backend:/backend
+      env_file:
+        - ./.env
+
+    frontend:
+      build:
+        context: .
+        dockerfile: config/frontend.Dockerfile
+      ports:
+       - "3000:3000"
