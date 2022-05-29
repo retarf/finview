@@ -4,27 +4,24 @@ services:
     db:
       image: postgres:14.2
       environment:
-        POSTGRES_USER: $BD_USER
-        POSTGRES_PASSWORD: $BD_PASS
-        POSTGRES_DB: $BD_NAME
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASS}
+        POSTGRES_DB: ${DB_NAME}
+        POSTGRES_PORT: ${DB_PORT}
       restart: always
 
     backend:
       build:
         context: .
         dockerfile: config/backend.Dockerfile
+        args:
+         DB_HOST: ${DB_HOST}
+         DB_PORT: ${DB_PORT}
       ports:
-       - "8000:8000"
+       - "${BE_PORT}:${BE_PORT}"
       depends_on:
         - db
       volumes:
         - ./backend:/backend
       env_file:
-        - ./.env
-
-    frontend:
-      build:
-        context: .
-        dockerfile: config/frontend.Dockerfile
-      ports:
-       - "3000:3000"
+        .env
