@@ -1,0 +1,6 @@
+{% csrf_token %}
+<ul>
+    {% for period in periods %}
+        <li><a href="{% url 'period:detail' period.name %}">{{ period.name }}</a></li>
+    {% endfor %}
+</ul>
